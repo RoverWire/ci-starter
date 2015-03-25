@@ -1,0 +1,2 @@
+# ci-starter
+Codeigniter Boilerplate
