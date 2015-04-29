@@ -1,2 +1,3 @@
-# ci-starter
-Codeigniter Boilerplate
+# Codeigniter Boilerplate
+
+Starter setup for codeigniter projects.
