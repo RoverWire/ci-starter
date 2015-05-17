@@ -66,7 +66,7 @@ class Template {
       $this->CI =& get_instance();
 
       // Load the template config file and setup our master template and regions
-      include(APPPATH.'config/template'.'.php');
+      include(APPPATH.'config/template.php');
       if (isset($template))
       {
          $this->config = $template;
