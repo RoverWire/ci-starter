@@ -93,7 +93,7 @@ class Auth_Attempt extends MY_Model {
 		}
 
 		$this->clean();
-		$blocked = $this->db->where('ip', $ip)->where('attempts<', $this->max_attempts)->count_all_results($this->_table);
+		$blocked = $this->db->where('ip', $ip)->where('attempts>=', $this->max_attempts)->count_all_results($this->_table);
 
 		if ($blocked == 0) {
 			return TRUE;

@@ -14,6 +14,10 @@
 
 class Auth	{
 
+	private $table_name        = 'users';
+	private $field_user        = 'user';
+	private $field_pass        = 'pass';
+	private $field_active      = 'status';
 	private $auth_method       = 'default';
 	private $auth_name         = 'ci_auth';
 	private $salt_length       = 10;
@@ -33,7 +37,7 @@ class Auth	{
 	 * @param  array  $param optional array configutation
 	 * @return void
 	 */
-	private function initialize($param = array())
+	public function initialize($param = array())
 	{
 		$auth = $this->ci->load->config('auth', TRUE, TRUE);
 
@@ -129,21 +133,7 @@ class Auth	{
 			$auth = $this->ci->phpass->CheckPassword($password, $stored);
 		} else {
 			$hash = $this->to_hash($password, $stored);
-			$auth = ($password === $hash);
-		}
-
-		if ($this->restrict_attempts) {
-			$ip = $this->ci->input->ip_address();
-
-			if ($auth) {
-				$this->ci->auth_attempt->delete($ip);
-			} else {
-				$this->ci->auth_attempt->attempt($ip);
-			}
-		}
-
-		if ($auth) {
-			$this->login();
+			$auth = ($hash === $stored);
 		}
 
 		return $auth;
@@ -163,13 +153,36 @@ class Auth	{
 	}
 
 	/**
-	 * creates the session variables to track
-	 * @return void
+	 * login procedure
+	 * @return boolean TRUE on success or else FALSE
 	 */
-	private function login()
+	public function login($user, $pass)
 	{
-		$this->ci->load->library('session');
-		$this->ci->session->set_userdata($this->auth_name, TRUE);
+		$this->ci->load->database();
+		$query = $this->ci->db->where($this->field_user, $user)->where($this->field_active, 1)->get($this->table_name, 1);
+		$ip = $this->ci->input->ip_address();
+
+		if ($query->num_rows() == 1) {
+			$data = $query->row_array();
+
+			if ($this->check($pass, $data[$this->field_pass])) {
+
+				if ($this->restrict_attempts) {
+					$this->ci->auth_attempt->delete($ip);
+				}
+
+				$this->ci->load->library('session');
+				$this->ci->session->set_userdata($this->auth_name, TRUE);
+
+				return TRUE;
+			}
+		}
+
+		if ($this->restrict_attempts) {
+			$this->ci->auth_attempt->attempt($ip);
+		}
+
+		return FALSE;
 	}
 
 	/**

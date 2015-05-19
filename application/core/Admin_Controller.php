@@ -2,7 +2,7 @@
 
 class Admin_Controller extends CI_Controller {
 
-	private   $public  = array('admin/login', 'admin/logout');
+	private   $public  = array('admin/login', 'admin/logout', 'admin/blocked');
 	protected $allowed = array(0);
 
 	public function __construct()
@@ -10,12 +10,13 @@ class Admin_Controller extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('url');
 		$this->load->library('session');
-		$this->load->database();
+		$this->load->model('administrator');
+		# admin_auth object is initialized on administrator model
 
 		$current   = $this->uri->segment(1, '') . '/' . $this->uri->segment(2, '');
 		$is_public = in_array($current, $this->public);
 
-		if( ! $is_public && !$this->session->userdata('auth')) {
+		if( ! $is_public && !$this->admin_auth->is_logged()) {
 			redirect('admin/login');
 		}
 
