@@ -10,7 +10,7 @@
  * @subpackage 	Libraries
  * @category 	Library
  * @author 		Luis Felipe Pérez
- * @version 	0.3.2
+ * @version 	0.4.1
  */
 
 class MY_Model extends CI_Model {
@@ -18,8 +18,9 @@ class MY_Model extends CI_Model {
 	protected $_id;
 	protected $_table;
 	protected $total_results;
-	protected $file_fields = array();
-	protected $field_names = array();
+	protected $grid_fields;
+	protected $file_fields   = array();
+	protected $field_names   = array();
 
 	protected $pre_insert = array();
 	protected $pos_insert = array();
@@ -186,6 +187,20 @@ class MY_Model extends CI_Model {
 				$id = array($id);
 			}
 
+			if (count($this->file_fields) > 0) {
+				$query = $this->db->where_in($this->_id, $id)->get($this->_table);
+
+				foreach ($query->result() as $row) {
+					foreach ($this->file_fields as $file) {
+						if(isset($row->$file) && !empty($row->$file) && file_exists('.'.$row->$file)) {
+							unlink('.'.$row->$file);
+						}
+					}
+				}
+
+				clearstatcache();
+			}
+
 			$this->db->where_in($this->_id, $id);
 		}
 
@@ -277,6 +292,43 @@ class MY_Model extends CI_Model {
 		return $data->total;
 	}
 
+	/**
+	 * Executes a simple search. Useful for a single table model
+	 * @param  string  $search string to search (optional)
+	 * @param  integer $offset data offset (optional)
+	 * @param  integer $limit  size of data set, if the value is 0, will return all results.
+	 * @return object          data result.
+	 */
+
+	public function search($search = '', $offset = 0, $limit = 15)
+	{
+		$fields = $this->grid_fields;
+
+		if (empty($fields)) {
+			$fields = '*';
+		}
+
+		$this->db->select("SQL_CALC_FOUND_ROWS $fields", FALSE);
+		$this->search_procedure($search);
+		$limit  = (is_numeric($limit)) ? $limit:15;
+
+		if ($limit != 0) {
+			$offset = (is_numeric($offset)) ? $offset:0;
+			$this->db->limit($limit, $offset);
+		}
+
+		return $this->db->get($this->_table);
+	}
+
+	protected function search_procedure($search = '')
+	{
+		/*
+		We can redeclare the function with query
+		filter statements like 'join', 'where'
+		and 'order by' on our extended classes
+		 */
+	}
+
 	/* --------------------------------------------------------------
 	 * UTILITIES
 	 * ------------------------------------------------------------ */
@@ -335,6 +387,10 @@ class MY_Model extends CI_Model {
 	{
 		if (! is_array($return)) {
 			$return = array();
+
+			if (count($this->field_names) == 0) {
+				$this->table_columns();
+			}
 
 			foreach ($this->field_names as $field) {
 				$return[$field] = '';
