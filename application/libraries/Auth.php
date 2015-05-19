@@ -14,15 +14,17 @@
 
 class Auth	{
 
-	private $salt_length  = 10;
-	private $max_attempts = 3;
-	private $blocked_time = '00:15:00';
+	private $auth_method       = 'default';
+	private $auth_name         = 'ci_auth';
+	private $salt_length       = 10;
+	private $restrict_attempts = TRUE;
+	private $max_attempts      = 3;
+	private $blocked_time      = '00:15:00';
 	private $ci;
 
 	public function __construct($config = array())
 	{
 		$this->ci =& get_instance();
-		$this->ci->load->model('auth_attempt');
 		$this->initialize($config);
 	}
 
@@ -59,8 +61,16 @@ class Auth	{
 			}
 		}
 
-		$this->ci->auth_attempt->set_blocked_time($this->blocked_time);
-		$this->ci->auth_attempt->set_max_attempts($this->max_attempts);
+		if ($this->auth_method == 'phpass') {
+			$phpass_conf = array('iteration_count_log2' => $this->salt_length);
+			$this->ci->load->library('phpass', $phpass_conf);
+		}
+
+		if ($this->restrict_attempts == TRUE) {
+			$this->ci->load->model('auth_attempt');
+			$this->ci->auth_attempt->set_blocked_time($this->blocked_time);
+			$this->ci->auth_attempt->set_max_attempts($this->max_attempts);
+		}
 	}
 
 	/**
@@ -99,28 +109,44 @@ class Auth	{
 			return '';
 		}
 
-		$salt = $this->salt();
-		return $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
+		if ($this->auth_method == 'phpass') {
+			return $this->ci->phpass->HashPassword($password);
+		} else {
+			$salt = $this->salt();
+			return $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
+		}
 	}
 
 	/**
-	 * Compare given password against stored hashed one
+	 * compare given password against stored hashed one
 	 * @param  string $password input password
 	 * @param  string $stored   stored and hashed password
 	 * @return bool             returns true if strings are equal, else return false.
 	 */
-	public function compare($password, $stored)
+	public function check($password, $stored)
 	{
-		$hash = $this->to_hash($password, $stored);
-		$ip   = $this->ci->input->ip_address();
-
-		if ($password == $hash) {
-			$this->ci->auth_attempt->delete($ip);
-			return TRUE;
+		if ($this->auth_method == 'phpass') {
+			$auth = $this->ci->phpass->CheckPassword($password, $stored);
 		} else {
-			$this->ci->auth_attempt->attempt($ip);
-			return FALSE;
+			$hash = $this->to_hash($password, $stored);
+			$auth = ($password === $hash);
 		}
+
+		if ($this->restrict_attempts) {
+			$ip = $this->ci->input->ip_address();
+
+			if ($auth) {
+				$this->ci->auth_attempt->delete($ip);
+			} else {
+				$this->ci->auth_attempt->attempt($ip);
+			}
+		}
+
+		if ($auth) {
+			$this->login();
+		}
+
+		return $auth;
 	}
 
 	/**
@@ -129,7 +155,41 @@ class Auth	{
 	 */
 	public function is_blocked()
 	{
-		return !$this->ci->auth_attempt->validate();
+		if ($this->restrict_attempts) {
+			return !$this->ci->auth_attempt->validate();
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * creates the session variables to track
+	 * @return void
+	 */
+	private function login()
+	{
+		$this->ci->load->library('session');
+		$this->ci->session->set_userdata($this->auth_name, TRUE);
+	}
+
+	/**
+	 * verify if the user is logged in
+	 * @return boolean TRUE if is logged else FALSE
+	 */
+	public function is_logged()
+	{
+		$this->ci->load->library('session');
+		return $this->ci->session->has_userdata($this->auth_name);
+	}
+
+	/**
+	 * unset the session variable to avoid access
+	 * @return void
+	 */
+	public function logout()
+	{
+		$this->ci->load->library('session');
+		$this->ci->session->unset_userdata($this->auth_name);
 	}
 
 }

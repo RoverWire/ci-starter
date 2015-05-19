@@ -77,7 +77,7 @@ class Auth_Attempt extends MY_Model {
 	 */
 	public function clean()
 	{
-		$this->db->where("TIMEDIFF(CURRENT_TIMESTAMP, blocked) > '00:30:00'", NULL, FALSE);
+		$this->db->where("TIMEDIFF(CURRENT_TIMESTAMP, blocked) > '{$this->blocked_time}'", NULL, FALSE);
 		$this->db->delete($this->_table);
 	}
 
