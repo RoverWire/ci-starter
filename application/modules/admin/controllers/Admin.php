@@ -18,12 +18,13 @@ class Admin extends Admin_Controller {
 	{
 		$this->template->set_master_template('layouts/admin_blank');
 		$this->template->write_view('content', 'login');
+		$this->template->write('body_class', 'login-page');
 		$this->template->render();
 	}
 
 	public function logout()
 	{
-		redirect('admin/login');
+		$this->template->render();
 	}
 
 }

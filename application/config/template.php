@@ -75,7 +75,8 @@ $template['default']['partials']       = array();
 $template['admin']['template'] = 'layouts/admin';
 $template['admin']['regions']  = array(
    'content',
-   'title'
+   'title',
+   'body_class'
 );
 
 $template['admin']['parser']         = 'parser';

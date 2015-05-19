@@ -14,7 +14,7 @@
 
     <script src="/assets/vendor/modernizr.js"></script>
   </head>
-  <body class="login-bg">
+  <body class="<?php echo $body_class ?>">
     <?php echo $content ?>
 
     <script src="/assets/vendor/jquery.js"></script>
