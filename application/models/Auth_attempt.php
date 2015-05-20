@@ -38,7 +38,9 @@ class Auth_Attempt extends MY_Model {
 	 */
 	public function set_blocked_time($time)
 	{
-		$this->blocked_time = $time;
+		if (preg_match('/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/', $time)) {
+			$this->blocked_time = $time;
+		}
 	}
 
 	/**
@@ -99,6 +101,22 @@ class Auth_Attempt extends MY_Model {
 			return TRUE;
 		} else {
 			return FALSE;
+		}
+	}
+
+	public function remaining($ip = '')
+	{
+		if (empty($ip)) {
+			$ip = $this->input->ip_address();
+		}
+
+		$query = $this->db->select('TIMEDIFF(CURRENT_TIMESTAMP, blocked) AS remaining', FALSE)->where('ip', $ip)->get($this->_table, 1);
+
+		if ($query->num_rows == 1) {
+			$row = $query->row();
+			return $row->remaining;
+		} else {
+			return 0;
 		}
 	}
 

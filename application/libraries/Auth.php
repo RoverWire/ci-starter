@@ -46,22 +46,8 @@ class Auth	{
 		}
 
 		foreach ($param as $key => $value) {
-			if (isset($this->$key) && !empty($value)) {
-				switch ($key) {
-					case 'blocked_time':
-						if (preg_match('/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/', $value)) {
-							$this->$key = $value;
-						}
-						break;
-
-					case 'ci':
-						# nothing to do, skip variable
-						break;
-
-					default:
-						$this->$key = $value;
-						break;
-				}
+			if (isset($this->$key) && !empty($value) && $key != 'ci') {
+				$this->$key = $value;
 			}
 		}
 
