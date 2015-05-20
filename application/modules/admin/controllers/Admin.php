@@ -35,6 +35,7 @@ class Admin extends Admin_Controller {
 		}
 
 		$this->template->set_master_template('layouts/admin_blank');
+		$this->template->write('title', 'Login');
 		$this->template->write_view('content', 'login');
 		$this->template->write('body_class', 'login-page');
 		$this->template->render();
@@ -48,7 +49,20 @@ class Admin extends Admin_Controller {
 
 	public function blocked()
 	{
-		echo "Blocked";
+		if (!$this->admin_auth->is_blocked()) {
+			redirect('admin/login');
+		}
+
+		$ip   = $this->input->ip_address();
+		$data = $this->admin_auth->time_remaining($ip);
+
+		$this->template->set_master_template('layouts/admin_blank');
+		$this->template->write('title', 'Blocked');
+		$this->template->write('body_class', 'login-page');
+		$this->template->write_view('content', 'blocked', $data);
+		$this->template->add_js('assets/vendor/countdown.js');
+		$this->template->add_js('assets/js/blocked.js');
+		$this->template->render();
 	}
 
 }

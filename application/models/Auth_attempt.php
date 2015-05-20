@@ -115,11 +115,10 @@ class Auth_Attempt extends MY_Model {
 			$ip = $this->input->ip_address();
 		}
 
-		$query = $this->db->select('TIMEDIFF(CURRENT_TIMESTAMP, blocked) AS remaining', FALSE)->where('ip', $ip)->get($this->_table, 1);
+		$query = $this->db->select("ADDTIME(blocked, '{$this->blocked_time}') AS final, TIMEDIFF('{$this->blocked_time}', TIMEDIFF(CURRENT_TIMESTAMP, blocked)) AS remaining", FALSE)->where('ip', $ip)->get($this->_table, 1);
 
-		if ($query->num_rows == 1) {
-			$row = $query->row();
-			return $row->remaining;
+		if ($query->num_rows() == 1) {
+			return $query->row_array();
 		} else {
 			return 0;
 		}
