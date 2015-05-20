@@ -104,6 +104,11 @@ class Auth_Attempt extends MY_Model {
 		}
 	}
 
+	/**
+	 * Get time remaining for a blocked ip
+	 * @param  string $ip user ip
+	 * @return mixed      time remaining
+	 */
 	public function remaining($ip = '')
 	{
 		if (empty($ip)) {

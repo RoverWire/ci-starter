@@ -108,7 +108,7 @@ class Auth	{
 	}
 
 	/**
-	 * compare given password against stored hashed one
+	 * Compare given password against stored hashed one
 	 * @param  string $password input password
 	 * @param  string $stored   stored and hashed password
 	 * @return bool             returns true if strings are equal, else return false.
@@ -126,7 +126,7 @@ class Auth	{
 	}
 
 	/**
-	 * validates if the user ip is already blocked or not.
+	 * Validates if the user ip is already blocked or not.
 	 * @return boolean blocked status
 	 */
 	public function is_blocked()
@@ -139,7 +139,21 @@ class Auth	{
 	}
 
 	/**
-	 * login procedure
+	 * Returns the time remaining for a blocked ip
+	 * @param  string $ip user ip
+	 * @return mixed      time remaining
+	 */
+	public function time_remaining($ip)
+	{
+		if ($this->restrict_attempts) {
+			return $this->ci->auth_attempt->remaining($ip);
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * Login procedure
 	 * @return boolean TRUE on success or else FALSE
 	 */
 	public function login($user, $pass)
@@ -172,7 +186,7 @@ class Auth	{
 	}
 
 	/**
-	 * verify if the user is logged in
+	 * Verify if the user is logged in
 	 * @return boolean TRUE if is logged else FALSE
 	 */
 	public function is_logged()
@@ -182,7 +196,7 @@ class Auth	{
 	}
 
 	/**
-	 * unset the session variable to avoid access
+	 * Unset the session variable to avoid access
 	 * @return void
 	 */
 	public function logout()
