@@ -2,7 +2,7 @@
       <div class="panel-login">
         <?php if ($this->session->flashdata('error') === TRUE): ?>
           <div class="alert alert-danger">
-            <button type="button" class="close" data-dismiss="alert">x</button>
+            <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
             Credenciales incorrectas. Intente de nuevo.
           </div>
         <?php endif ?>
