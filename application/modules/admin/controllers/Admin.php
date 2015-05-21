@@ -65,6 +65,24 @@ class Admin extends Admin_Controller {
 		$this->template->render();
 	}
 
+	public function recover_password()
+	{
+		$this->template->set_master_template('layouts/admin_blank');
+		$this->template->write('title', 'Recover Password');
+		$this->template->write_view('content', 'recover_password');
+		$this->template->write('body_class', 'login-page');
+		$this->template->render();
+	}
+
+	public function reset_password($user = '', $token = '')
+	{
+		$this->template->set_master_template('layouts/admin_blank');
+		$this->template->write('title', 'Reset Password');
+		$this->template->write_view('content', 'reset_password');
+		$this->template->write('body_class', 'login-page');
+		$this->template->render();
+	}
+
 }
 
 /* End of file Admin.php */
