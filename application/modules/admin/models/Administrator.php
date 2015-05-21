@@ -19,10 +19,7 @@ class Administrator extends MY_Model {
 		 * settings for this model.
 		 */
 		$config = array(
-			'table_name' => $this->_table,
-			'field_user' => 'user',
-			'field_pass' => 'pass',
-			'field_active' => 'status'
+			'table_name' => $this->_table
 		);
 
 		$this->load->library('auth', $config, 'admin_auth');

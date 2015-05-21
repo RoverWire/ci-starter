@@ -29,13 +29,16 @@
 | an integer between 8 and 31. By Default is 10.
 |
 */
-$config['auth_method']  = 'default';
-$config['auth_name']    = 'ci_auth';
-$config['salt_length']  = 10;
-$config['table_name']   = '';
-$config['field_user']   = 'user';
-$config['field_pass']   = 'pass';
-$config['field_active'] = 'active';
+$config['auth_method']        = 'default';
+$config['auth_name']          = 'ci_auth';
+$config['salt_length']        = 10;
+$config['table_name']         = '';
+$config['field_user']         = 'user';
+$config['field_pass']         = 'pass';
+$config['field_active']       = 'active';
+$config['field_mail_token']   = 'mail_token';
+$config['field_mail_expires'] = 'mail_expires';
+$config['days_mail_expires']  = 2;
 
 
 /*

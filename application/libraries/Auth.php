@@ -14,16 +14,19 @@
 
 class Auth	{
 
-	private $table_name        = 'users';
-	private $field_user        = 'user';
-	private $field_pass        = 'pass';
-	private $field_active      = 'status';
-	private $auth_method       = 'default';
-	private $auth_name         = 'ci_auth';
-	private $salt_length       = 10;
-	private $restrict_attempts = TRUE;
-	private $max_attempts      = 3;
-	private $blocked_time      = '00:15:00';
+	private $table_name         = 'users';
+	private $field_user         = 'user';
+	private $field_pass         = 'pass';
+	private $field_active       = 'active';
+	private $field_mail_token   = 'mail_token';
+	private $field_mail_expires = 'mail_expires';
+	private $auth_method        = 'default';
+	private $auth_name          = 'ci_auth';
+	private $salt_length        = 10;
+	private $restrict_attempts  = TRUE;
+	private $max_attempts       = 3;
+	private $blocked_time       = '00:15:00';
+	private $days_mail_expires  = 2;
 	private $ci;
 
 	public function __construct($config = array())
@@ -203,6 +206,78 @@ class Auth	{
 	{
 		$this->ci->load->library('session');
 		$this->ci->session->unset_userdata($this->auth_name);
+	}
+
+	/**
+	 * Generates a strong password of N length without ambiguos
+	 * characters like 0, o, 1 and l. Also you can choose between four
+	 * available characters sets: lowercase, uppercase, digits and symbols
+	 * @param  integer $length         password length
+	 * @param  boolean $add_dashes     add dashes to password
+	 * @param  string  $available_sets available sets of characters
+	 * @return string                  password generated
+	 */
+	function generate_password($length = 8, $add_dashes = FALSE, $available_sets = 'luds')
+	{
+		$sets     = array();
+		$all      = '';
+		$password = '';
+
+		if (strpos($available_sets, 'l') !== FALSE) {
+			$sets[] = 'abcdefghjkmnpqrstuvwxyz';
+		}
+
+		if (strpos($available_sets, 'u') !== FALSE) {
+			$sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
+		}
+
+		if (strpos($available_sets, 'd') !== FALSE) {
+			$sets[] = '23456789';
+		}
+
+		if (strpos($available_sets, 's') !== FALSE) {
+			$sets[] = '!@#$%&*?';
+		}
+
+		foreach($sets as $set) {
+			$password .= $set[array_rand(str_split($set))];
+			$all      .= $set;
+		}
+
+		$all = str_split($all);
+
+		for($i = 0; $i < $length - count($sets); $i++) {
+			$password .= $all[array_rand($all)];
+		}
+
+		$password = str_shuffle($password);
+
+		if(!$add_dashes) {
+			return $password;
+		} else {
+			$dash_len = floor(sqrt($length));
+			$dash_str = '';
+
+			while(strlen($password) > $dash_len) {
+				$dash_str .= substr($password, 0, $dash_len) . '-';
+				$password  = substr($password, $dash_len);
+			}
+
+			$dash_str .= $password;
+			return $dash_str;
+		}
+	}
+
+	public function generate_mail_token($user)
+	{
+		$password = $this->generate_password(8);
+		$token    = $this->hash($password);
+		$this->ci->db->set($this->field_mail_token, $token)
+		             ->set($this->field_mail_expires, "DATE_ADD(NOW(), INTERVAL {$this->days_mail_expires} DAY)", FALSE)
+		             ->where($this->field_user, $user)
+		             ->update($this->table_name);
+
+		return $password;
 	}
 
 }

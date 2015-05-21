@@ -2,7 +2,7 @@
 
 class Admin_Controller extends CI_Controller {
 
-	private   $public  = array('admin/login', 'admin/logout', 'admin/blocked');
+	private   $public  = array('admin/login', 'admin/blocked', 'admin/recover-password', 'admin/reset-password');
 	protected $allowed = array(0);
 
 	public function __construct()

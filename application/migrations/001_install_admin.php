@@ -12,7 +12,9 @@ class Migration_Install_Admin extends CI_Migration {
 				"`user` varchar(50) NOT NULL",
 				"`pass` varchar(100) NOT NULL",
 				"`mail` varchar(50) NOT NULL",
-				"`status` int(1) NOT NULL DEFAULT '0'",
+				"`active` int(1) NOT NULL DEFAULT '0'",
+				"`mail_token` varchar(100) NULL",
+				"`mail_expires` datetime NULL",
 				"`created` datetime NOT NULL",
 				"`updated` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'",
 				"`access` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'"
@@ -20,7 +22,7 @@ class Migration_Install_Admin extends CI_Migration {
 
 		$this->dbforge->add_field($fields);
 		$this->dbforge->create_table('administrators', TRUE, $attributes);
-		$this->db->simple_query("INSERT INTO `administrators` (`name`, `user`, `pass`, `mail`, `status`, `created`) VALUES ('Administrador', 'admin', '09ae22c2c195d71cca64d461a1603332efb073d9', 'admin@localhost.com', 1, CURRENT_TIMESTAMP)");
+		$this->db->simple_query("INSERT INTO `administrators` (`name`, `user`, `pass`, `mail`, `active`, `created`) VALUES ('Administrador', 'admin', '09ae22c2c195d71cca64d461a1603332efb073d9', 'admin@localhost.com', 1, CURRENT_TIMESTAMP)");
 
 		$fields = array(
 				"`ip` varchar(20) NOT NULL PRIMARY KEY",
