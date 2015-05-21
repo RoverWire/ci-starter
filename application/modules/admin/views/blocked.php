@@ -10,7 +10,7 @@
 
 			<p>Podrá intentar nuevamente en:</p>
 
-			<div id="clock" class="text-center" data-end="<?php echo $final ?>"><?php echo $remaining ?></div>
+			<div id="clock" class="text-center" data-remaining="<?php echo $remaining ?>"><?php echo $remaining ?></div>
 		</div>
 	</div>
 </div>

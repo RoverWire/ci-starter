@@ -54,7 +54,7 @@ class Admin extends Admin_Controller {
 		}
 
 		$ip   = $this->input->ip_address();
-		$data = $this->admin_auth->time_remaining($ip);
+		$data = array('remaining' => $this->admin_auth->time_remaining($ip));
 
 		$this->template->set_master_template('layouts/admin_blank');
 		$this->template->write('title', 'Blocked');
