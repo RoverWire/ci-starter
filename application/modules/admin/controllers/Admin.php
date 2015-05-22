@@ -14,14 +14,6 @@ class Admin extends Admin_Controller {
 
 	public function login()
 	{
-		if ($this->admin_auth->is_blocked()) {
-			redirect('admin/blocked');
-		}
-
-		if ($this->admin_auth->is_logged()) {
-			redirect('admin');
-		}
-
 		$this->load->model('administrator');
 		$this->form_validation->set_rules('user', 'Usuario', 'required|trim');
 		$this->form_validation->set_rules('pass', 'Password', 'required|trim');
@@ -31,6 +23,7 @@ class Admin extends Admin_Controller {
 				redirect('admin');
 			} else {
 				$this->session->set_flashdata('error', TRUE);
+				redirect('admin/login');
 			}
 		}
 
@@ -65,17 +58,29 @@ class Admin extends Admin_Controller {
 		$this->template->render();
 	}
 
-	public function recover_password()
+	public function lost_password()
 	{
+		$this->form_validation->set_rules('mail', 'Corrreo', 'required|valid_email|trim');
+		if ($this->form_validation->run()) {
+			if ($this->administrator->send_password($this->input->post('mail', TRUE))) {
+				$this->session->set_flashdata('success', TRUE);
+			} else {
+				$this->session->set_flashdata('error', TRUE);
+			}
+
+			redirect('admin/lost-password');
+		}
+
 		$this->template->set_master_template('layouts/admin_blank');
-		$this->template->write('title', 'Recover Password');
-		$this->template->write_view('content', 'recover_password');
+		$this->template->write('title', 'Lost Password');
+		$this->template->write_view('content', 'lost_password');
 		$this->template->write('body_class', 'login-page');
 		$this->template->render();
 	}
 
 	public function reset_password($user = '', $token = '')
 	{
+		$this->admin_auth->clean_expired_tokens();
 		$this->template->set_master_template('layouts/admin_blank');
 		$this->template->write('title', 'Reset Password');
 		$this->template->write_view('content', 'reset_password');

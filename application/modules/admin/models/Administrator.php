@@ -4,10 +4,10 @@ class Administrator extends MY_Model {
 
 	protected $_id         = 'id';
 	protected $_table      = 'administrators';
-	protected $field_names = array('name', 'user', 'pass', 'mail', 'status', 'created', 'updated', 'access');
+	protected $field_names = array('name', 'user', 'pass', 'mail', 'active', 'created');
 	protected $pre_insert  = array('hash_password', 'datetime_created');
 	protected $pre_update  = array('hash_password', 'datetime_updated');
-	protected $grid_fields = 'id, name, user, mail, status';
+	protected $grid_fields = 'id, name, user, mail, active';
 
 	public function __construct()
 	{
@@ -63,6 +63,19 @@ class Administrator extends MY_Model {
 	public function login($user, $pass)
 	{
 		return $this->admin_auth->login($user, $pass);
+	}
+
+	public function send_password($mail)
+	{
+		$query = $this->db->select('name, user, mail')->where('mail', $mail)->get($this->_table, 1);
+
+		if ($query->num_rows() > 0) {
+			$token = $this->admin_auth->generate_mail_token($mail);
+
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 
 }

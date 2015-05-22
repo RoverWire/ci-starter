@@ -268,16 +268,44 @@ class Auth	{
 		}
 	}
 
+	/**
+	 * Generates a token for mail activation or password recover.
+	 * The token is saved on database and set it lifetime.
+	 * @param  string $user username
+	 * @return string       generated token
+	 */
 	public function generate_mail_token($user)
 	{
-		$password = $this->generate_password(8);
-		$token    = $this->hash($password);
-		$this->ci->db->set($this->field_mail_token, $token)
-		             ->set($this->field_mail_expires, "DATE_ADD(NOW(), INTERVAL {$this->days_mail_expires} DAY)", FALSE)
-		             ->where($this->field_user, $user)
-		             ->update($this->table_name);
+		$active = $this->ci->db->where($this->field_mail_expires . '> TIME_ADD(NOW(), INTERVAL 2 HOUR)')
+							   ->where($this->field_user, $user)
+							   ->count_all_results($this->table_name);
 
-		return $password;
+		if ($active) {
+			$query = $this->ci->db->select($this->field_mail_token.' AS token')
+								  ->where($this->field_user, $user)
+								  ->get($this->table_name, 1)->row();
+			$token = $query->token;
+		} else {
+			$token    = $this->hash($this->generate_password(8));
+			$this->ci->db->set($this->field_mail_token, $token)
+			             ->set($this->field_mail_expires, "DATE_ADD(NOW(), INTERVAL {$this->days_mail_expires} DAY)", FALSE)
+			             ->where($this->field_user, $user)
+			             ->update($this->table_name);
+		}
+
+		return $token;
+	}
+
+	/**
+	 * Clean expired tokens from the table
+	 * @return void
+	 */
+	public function clean_expired_tokens()
+	{
+		$this->ci->db->set($this->field_mail_token, NULL)
+		             ->set($this->field_mail_expires, NULL)
+		             ->where($this->field_mail_expires .' < NOW()')
+		             ->update($this->table_name);
 	}
 
 }

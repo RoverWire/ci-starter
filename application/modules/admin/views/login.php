@@ -26,6 +26,6 @@
         </section>
       </div>
       <div class="col-md-12 text-center">
-        <a href="/admin/recover-password">¿Olvidó su contraseña?</a>
+        <a href="/admin/lost-password">¿Olvidó su contraseña?</a>
       </div>
     </div>
