@@ -38,13 +38,13 @@
       <ul class="nav navbar-nav navbar-right off-right">
         <li class="hidden-xs">
           <a href="#">
-            Administrador
+            <?php echo $_SESSION['session_name'] ?>
           </a>
         </li>
 
         <li class="quickmenu">
           <a href="javascript:;" data-toggle="dropdown">
-            <img src="/assets/img/avatar.jpg" class="avatar pull-left img-circle" alt="user" title="user">
+            <img src="<?php echo $_SESSION['session_gravatar'] ?>" class="avatar pull-left img-circle" alt="user" title="user">
             <i class="caret mg-l-xs hidden-xs no-margin"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-right mg-r-xs">
