@@ -6,6 +6,14 @@
             Credenciales incorrectas. Intente de nuevo.
           </div>
         <?php endif ?>
+
+        <?php if ($this->session->flashdata('success') === TRUE): ?>
+          <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+            Accesos actualizados. Puede iniciar sesión con su nueva contraseña.
+          </div>
+        <?php endif ?>
+
         <section class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title text-center">Administración</h3>

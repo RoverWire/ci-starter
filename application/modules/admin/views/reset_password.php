@@ -2,17 +2,10 @@
     <div class="center-content">
       <div class="panel-login">
 
-        <?php if ($this->session->flashdata('error') === TRUE): ?>
+        <?php if (validation_errors()): ?>
           <div class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
-            El correo proporcionado no se encuentra registrado.
-          </div>
-        <?php endif ?>
-
-        <?php if ($this->session->flashdata('sucess') === TRUE): ?>
-          <div class="alert alert-info">
-            <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
-            Los nuevos accesos le han sido enviado a su correo. No olvide verificar su carpeta de SPAM.
+            <?php echo validation_errors(); ?>
           </div>
         <?php endif ?>
 

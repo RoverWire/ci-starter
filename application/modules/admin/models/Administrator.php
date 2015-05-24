@@ -25,27 +25,27 @@ class Administrator extends MY_Model {
 		$this->load->library('auth', $config, 'admin_auth');
 	}
 
-	private function update_access($id)
+	protected function update_access($id)
 	{
 		$this->db->set('access', date('Y-m-d H:i:s'))->where($this->_id, $id)->update($this->_table);
 	}
 
-	private function datetime_created($data)
+	protected function datetime_created($data)
 	{
 		$data['created'] = date('Y-m-d H:i:s');
 		return $data;
 	}
 
-	private function datetime_updated($data)
+	protected function datetime_updated($data)
 	{
 		$data['updated'] = date('Y-m-d H:i:s');
 		return $data;
 	}
 
-	private function hash_password($data)
+	protected function hash_password($data)
 	{
 		if (isset($data['pass']) && !empty($data['pass'])) {
-			$data['pass'] = $this->admin_auth->hash_password($data['pass']);
+			$data['pass'] = $this->admin_auth->hash($data['pass']);
 		} else {
 			unset($data['pass']);
 		}
@@ -91,7 +91,7 @@ class Administrator extends MY_Model {
 	public function change_password($user, $pass)
 	{
 		if (!empty($user) && !empty($pass)) {
-			$data = array('pass' => $pass);
+			$data   = array('pass' => $pass);
 			$update = $this->where('user', $user)->update($data);
 
 			if ($update) {

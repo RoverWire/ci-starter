@@ -83,14 +83,17 @@ class Admin extends Admin_Controller {
 	public function reset_password($user = '', $token = '')
 	{
 		if (!$this->admin_auth->validate_mail_token($user, $token)) {
-			redirect('admin');
+			$this->session->set_flashdata('error', TRUE);
+			redirect('admin/login');
 		}
 
 		$this->form_validation->set_rules('pass', 'nueva contraseña', 'required|min_length[8]|trim');
 		$this->form_validation->set_rules('confirm', 'confirmar contraseña', 'required|matches[pass]|trim');
+		$this->form_validation->set_error_delimiters('', '<br>');
 
 		if ($this->form_validation->run()) {
 			if ($this->administrator->change_password($user, $this->input->post('pass', TRUE))) {
+				$this->session->set_flashdata('success', TRUE);
 				redirect('admin/login');
 			}
 		}
