@@ -2,6 +2,13 @@
     <div class="center-content">
       <div class="panel-login">
 
+        <?php if (validation_errors()): ?>
+          <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+            <?php echo validation_errors(); ?>
+          </div>
+        <?php endif ?>
+
         <?php if ($this->session->flashdata('error') === TRUE): ?>
           <div class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>

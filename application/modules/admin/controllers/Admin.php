@@ -60,7 +60,9 @@ class Admin extends Admin_Controller {
 
 	public function lost_password()
 	{
-		$this->form_validation->set_rules('mail', 'Corrreo', 'required|valid_email|trim');
+		$this->form_validation->set_rules('mail', 'Correo', 'required|valid_email|trim');
+		$this->form_validation->set_error_delimiters('', '');
+
 		if ($this->form_validation->run()) {
 			if ($this->administrator->send_password($this->input->post('mail', TRUE))) {
 				$this->session->set_flashdata('success', TRUE);
@@ -80,7 +82,19 @@ class Admin extends Admin_Controller {
 
 	public function reset_password($user = '', $token = '')
 	{
-		$this->admin_auth->clean_expired_tokens();
+		if (!$this->admin_auth->validate_mail_token($user, $token)) {
+			redirect('admin');
+		}
+
+		$this->form_validation->set_rules('pass', 'nueva contraseña', 'required|min_length[8]|trim');
+		$this->form_validation->set_rules('confirm', 'confirmar contraseña', 'required|matches[pass]|trim');
+
+		if ($this->form_validation->run()) {
+			if ($this->administrator->change_password($user, $this->input->post('pass', TRUE))) {
+				redirect('admin/login');
+			}
+		}
+
 		$this->template->set_master_template('layouts/admin_blank');
 		$this->template->write('title', 'Reset Password');
 		$this->template->write_view('content', 'reset_password');

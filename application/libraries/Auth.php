@@ -271,12 +271,13 @@ class Auth	{
 	/**
 	 * Generates a token for mail activation or password recover.
 	 * The token is saved on database and set it lifetime.
+	 *
 	 * @param  string $user username
 	 * @return string       generated token
 	 */
 	public function generate_mail_token($user)
 	{
-		$active = $this->ci->db->where($this->field_mail_expires . '> TIME_ADD(NOW(), INTERVAL 2 HOUR)')
+		$active = $this->ci->db->where($this->field_mail_expires . "> ADDTIME(NOW(), '02:00:00')")
 							   ->where($this->field_user, $user)
 							   ->count_all_results($this->table_name);
 
@@ -294,6 +295,26 @@ class Auth	{
 		}
 
 		return $token;
+	}
+
+	/**
+	 * Validates if token exists and is valid
+	 * @param  string $user  username
+	 * @param  string $token token
+	 * @return bool          is valid
+	 */
+	public function validate_mail_token($user, $token)
+	{
+		$this->clean_expired_tokens();
+
+		$user  = $this->ci->security->xss_clean($user);
+		$token = $this->ci->security->xss_clean($token);
+		$valid = $this->ci->db->where($this->field_mail_expires. '> NOW()')
+							  ->where($this->field_user, $user)
+							  ->where($this->field_mail_token, $token)
+							  ->count_all_results($this->table_name);
+
+		return ($valid == 1) ? TRUE:FALSE;
 	}
 
 	/**

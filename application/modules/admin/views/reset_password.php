@@ -24,10 +24,10 @@
             <form accept-charset="UTF-8" action="" role="form" method="post">
               <fieldset>
                 <div class="form-group">
-                  <input type="password" class="form-control" placeholder="Nueva Contraseña" name="mail">
+                  <input type="password" class="form-control" placeholder="Nueva Contraseña" name="pass">
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control" placeholder="Confirmar" name="mail">
+                  <input type="password" class="form-control" placeholder="Confirmar" name="confirm">
                 </div>
                 <button class="btn btn-lg btn-info btn-block" type="submit">Actualizar</button>
               </fieldset>

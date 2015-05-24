@@ -67,12 +67,38 @@ class Administrator extends MY_Model {
 
 	public function send_password($mail)
 	{
-		$query = $this->db->select('name, user, mail')->where('mail', $mail)->get($this->_table, 1);
+		$query = $this->db->select('id, name, user, mail')->where('mail', $mail)->get($this->_table, 1);
 
 		if ($query->num_rows() > 0) {
-			$token = $this->admin_auth->generate_mail_token($mail);
+			$data          = $query->row_array();
+			$token         = $this->admin_auth->generate_mail_token($data['user']);
+			$data['token'] = $token;
+			$message       = $this->load->view('mail_password', $data, TRUE);
+
+			$this->load->library('email');
+			$this->email->to($data['mail']);
+			$this->email->subject('Password Reset');
+			$this->email->message($message);
+			$this->email->from('system@example.com', 'Auth System');
+			$this->email->send();
 
 			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function change_password($user, $pass)
+	{
+		if (!empty($user) && !empty($pass)) {
+			$data = array('pass' => $pass);
+			$update = $this->where('user', $user)->update($data);
+
+			if ($update) {
+				$this->db->set('mail_token', NULL)->set('mail_expires', NULL)->where('user', $user)->update($this->_table);
+			}
+
+			return $update;
 		} else {
 			return FALSE;
 		}
