@@ -9,6 +9,12 @@ class Admin extends Admin_Controller {
 
 	public function index()
 	{
+		$this->load->library('analytics');
+		$data['report'] = $this->analytics->get_visits();
+
+		$this->template->write('title', 'Inicio');
+		$this->template->write_view('content', 'index', $data);
+		$this->template->asset_css('analytics.css');
 		$this->template->render();
 	}
 

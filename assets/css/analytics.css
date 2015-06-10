@@ -1,0 +1,15 @@
+.main-graph {
+  width: 100%;
+  height: 400px;
+  box-sizing: border-box;
+}
+
+.panel-graph, .panel-graph .panel-body {
+  box-sizing: border-box;
+}
+
+.canvas-holder {
+  padding: 4px 0;
+  margin: 0;
+  position: relative;
+}
