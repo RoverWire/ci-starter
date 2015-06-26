@@ -131,7 +131,7 @@ var app = {
         if ($(".date").length) {
             $(".date").datepicker();
         };
-        
+
         $('input, textarea').placeholder();
 
         $(document).on("click", ".view-options label", function (e) {
@@ -258,12 +258,17 @@ var app = {
         });
 
         $(".main-navigation > ul > li.collapse-open").each(function () {
-            //$(".dropdown-menu").hide();
             $(this).children(".dropdown-menu").hide().show();
         });
 
         if ($('.color-picker').length) {
             $('.color-picker').colorpicker();
+        };
+
+        if ($('.js-switch').length) {
+            $('.js-switch').each(function(index, el) {
+                var switchery = new Switchery(el);
+            });
         };
 
         Offline.options = {interceptRequests: false};

@@ -9,8 +9,8 @@ class Admin_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper('url');
-		$this->load->library('session');
+		$this->load->helper(array('url', 'crud'));
+		$this->load->library(array('session', 'form_validation'));
 		$this->load->model('administrator');
 		# admin_auth object is initialized on administrator model
 
@@ -30,7 +30,6 @@ class Admin_Controller extends CI_Controller {
 			redirect('admin/blocked');
 		}
 
-		$this->load->library('form_validation');
 		$this->template->set_template('admin');
 		$this->form_validation->set_error_delimiters('<div class="help-block">', '</div>');
 	}

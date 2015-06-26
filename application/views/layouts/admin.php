@@ -73,6 +73,12 @@
                 <span>Inicio</span>
               </a>
             </li>
+            <li>
+              <a href="/admin/access">
+                <i class="fa fa-lock"></i>
+                <span>Administradores</span>
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -109,6 +115,7 @@
   <script src="/assets/vendor/off-canvas.js"></script>
   <script src="/assets/vendor/jquery.placeholder.js"></script>
   <script src="/assets/vendor/offline/offline.min.js"></script>
+  <?php echo $_scripts ?>
   <script src="/assets/js/main.js"></script>
 </body>
 </html>

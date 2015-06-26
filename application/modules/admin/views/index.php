@@ -12,9 +12,9 @@
   </div>
 </div>
 
-<div class="panel panel-graph">
-  <div class="panel-heading">
-    <h4 class="panel-title">Analytics</h4>
+<div class="panel panel-default">
+  <div class="heading pd-lg">
+    <h4>Visitas de Últimos 15 Días</h4>
   </div>
   <div class="panel-body">
     <div class="canvas-holder">
@@ -27,7 +27,7 @@
 <script>
   var options = {
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: true
   }
 
   var data = {
