@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Admin extends Admin_Controller {
+class Access extends Admin_Controller {
 
 	public function __construct()
 	{
@@ -8,17 +8,6 @@ class Admin extends Admin_Controller {
 	}
 
 	public function index()
-	{
-		$this->load->library('analytics');
-		$data['report'] = $this->analytics->get_visits();
-
-		$this->template->write('title', 'Inicio');
-		$this->template->write_view('content', 'index', $data);
-		$this->template->asset_css('analytics.css');
-		$this->template->render();
-	}
-
-	public function login()
 	{
 		$this->load->model('administrator');
 		$this->form_validation->set_rules('user', 'Usuario', 'required|trim');
@@ -29,7 +18,7 @@ class Admin extends Admin_Controller {
 				redirect('admin');
 			} else {
 				$this->session->set_flashdata('error', TRUE);
-				redirect('admin/login');
+				redirect('access');
 			}
 		}
 
@@ -43,13 +32,13 @@ class Admin extends Admin_Controller {
 	public function logout()
 	{
 		$this->admin_auth->logout();
-		redirect('admin/login');
+		redirect('access');
 	}
 
 	public function blocked()
 	{
 		if (!$this->admin_auth->is_blocked()) {
-			redirect('admin/login');
+			redirect('access');
 		}
 
 		$ip   = $this->input->ip_address();
@@ -76,7 +65,7 @@ class Admin extends Admin_Controller {
 				$this->session->set_flashdata('error', TRUE);
 			}
 
-			redirect('admin/lost-password');
+			redirect('access/lost-password');
 		}
 
 		$this->template->set_master_template('layouts/admin_blank');
@@ -90,7 +79,7 @@ class Admin extends Admin_Controller {
 	{
 		if (!$this->admin_auth->validate_mail_token($user, $token)) {
 			$this->session->set_flashdata('error', TRUE);
-			redirect('admin/login');
+			redirect('access');
 		}
 
 		$this->form_validation->set_rules('pass', 'nueva contraseña', 'required|min_length[8]|trim');
@@ -100,7 +89,7 @@ class Admin extends Admin_Controller {
 		if ($this->form_validation->run()) {
 			if ($this->administrator->change_password($user, $this->input->post('pass', TRUE))) {
 				$this->session->set_flashdata('success', TRUE);
-				redirect('admin/login');
+				redirect('access');
 			}
 		}
 
@@ -111,7 +100,8 @@ class Admin extends Admin_Controller {
 		$this->template->render();
 	}
 
+
 }
 
-/* End of file Admin.php */
-/* Location: ./application/controllers/Admin.php */
+/* End of file Access.php */
+/* Location: ./application/controllers/Access.php */

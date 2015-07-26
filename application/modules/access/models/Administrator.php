@@ -83,6 +83,7 @@ class Administrator extends MY_Model {
 			$data          = $query->row_array();
 			$token         = $this->admin_auth->generate_mail_token($data['user']);
 			$data['token'] = $token;
+			$data['site']  = $this->config->item('base_url');
 			$message       = $this->load->view('mail_password', $data, TRUE);
 
 			$this->load->library('email');

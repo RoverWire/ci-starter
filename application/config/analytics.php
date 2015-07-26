@@ -2,5 +2,5 @@
 
 
 $config['account_mail'] = '';
-$config['key_location'] = APPPATH . 'third_party/Google/key.p12';
+$config['key_location'] = '';
 $config['profile_id']   = '';

@@ -2,8 +2,8 @@
 
 class Admin_Controller extends CI_Controller {
 
-	private   $public    = array('admin/login', 'admin/blocked', 'admin/lost-password', 'admin/reset-password');
-	private   $no_block  = array('admin/blocked', 'admin/lost-password', 'admin/reset-password');
+	private   $public    = array('access/', 'access/blocked', 'access/lost-password', 'access/reset-password');
+	private   $no_block  = array('access/blocked', 'access/lost-password', 'access/reset-password');
 	protected $allowed   = array(0);
 
 	public function __construct()
@@ -11,7 +11,7 @@ class Admin_Controller extends CI_Controller {
 		parent::__construct();
 		$this->load->helper(array('url', 'crud'));
 		$this->load->library(array('session', 'form_validation'));
-		$this->load->model('administrator');
+		$this->load->model('access/administrator');
 		# admin_auth object is initialized on administrator model
 
 		$current         = $this->uri->segment(1, '') . '/' . $this->uri->segment(2, '');
@@ -19,7 +19,7 @@ class Admin_Controller extends CI_Controller {
 		$blocked_allowed = in_array($current, $this->no_block);
 
 		if ( ! $is_public && !$this->admin_auth->is_logged()) {
-			redirect('admin/login');
+			redirect('access');
 		}
 
 		if ( $is_public && $this->admin_auth->is_logged() ) {
@@ -27,7 +27,7 @@ class Admin_Controller extends CI_Controller {
 		}
 
 		if ( $this->admin_auth->is_blocked() && !$blocked_allowed ) {
-			redirect('admin/blocked');
+			redirect('access/blocked');
 		}
 
 		$this->template->set_template('admin');

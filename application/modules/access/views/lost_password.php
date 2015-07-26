@@ -42,6 +42,6 @@
         </section>
       </div>
       <div class="col-md-12 text-center">
-        <a href="/admin/login">Regresar</a>
+        <a href="/access">Regresar</a>
       </div>
     </div>
