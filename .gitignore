@@ -6,3 +6,4 @@
 */cache/!.htaccess
 
 **/.DS_Store
+**/*.p12
