@@ -10,7 +10,7 @@
  * @subpackage 	Analytics
  * @category 	Library
  * @author 		Luis Felipe Pérez
- * @version 	0.1.2
+ * @version 	0.2.1
  */
 
 require_once(APPPATH . 'third_party/Google/autoload.php');
@@ -25,13 +25,16 @@ class Analytics {
 	private $end_date;
 	private $ci;
 	private $error;
-	private $fail;
+	private $abort;
 
 	public function __construct($params = array())
 	{
 		$this->ci =& get_instance();
 		$this->initialize($params);
-		$this->set_credentials();
+
+		if (!$this->abort) {
+			$this->set_credentials();
+		}
 	}
 
 	public function initialize($params = array())
@@ -47,8 +50,15 @@ class Analytics {
 			}
 		}
 
-		if (empty($this->key_location) || !file_exists($this->key_location)) {
-			show_error('Invalid Google service key file location');
+		if (empty($this->key_location) || empty($this->account_mail) || empty($this->profile_id)) {
+			$this->error = 'Settings are not complete';
+			$this->abort = TRUE;
+		} else {
+			$this->abort = FALSE;
+		}
+
+		if (!$this->abort && !file_exists($this->key_location)) {
+			show_error('Invalid Google service key file location', 500, 'Google Analytics');
 		}
 
 		$this->start_date = date('Y-m-d', strtotime('-15 days'));
@@ -61,33 +71,36 @@ class Analytics {
 		$client->setApplicationName("CodeigniterAnalytics");
 		$service = new Google_Service_Analytics($client);
 
-		if (isset($_SESSION['service_token'])) {
-			$client->setAccessToken($_SESSION['service_token']);
-		}
-
-		$key = file_get_contents($this->key_location);
-
 		try {
+			if (isset($_SESSION['service_token'])) {
+				$client->setAccessToken($_SESSION['service_token']);
+			}
+
+			$key = file_get_contents($this->key_location);
 			$cred = new Google_Auth_AssertionCredentials(
 			    $this->account_mail,
 			    array(Google_Service_Analytics::ANALYTICS_READONLY),
 			    $key
 			);
+
+			$client->setAssertionCredentials($cred);
+
+			if($client->getAuth()->isAccessTokenExpired()) {
+				$client->getAuth()->refreshTokenWithAssertion($cred);
+			}
+
+			$_SESSION['service_token'] = $client->getAccessToken();
+			$this->service = new Google_Service_Analytics($client);
 		} catch (Google_Service_Exception $e) {
-			print "Error code :" . $e->getCode() . "\n";
-			print "Error message: " . $e->getMessage() . "\n";
+			show_error("Error code: " . $e->getCode() . "<br>" . "Error message: " . $e->getMessage(), 500, 'Google Analytics');
 		} catch (Google_Exception $e) {
-			print "An error occurred: (" . $e->getCode() . ") " . $e->getMessage() . "\n";
+			show_error("An error occurred: (" . $e->getCode() . ") " . $e->getMessage(), 500, 'Google Exception');
 		}
+	}
 
-		$client->setAssertionCredentials($cred);
-
-		if($client->getAuth()->isAccessTokenExpired()) {
-		  $client->getAuth()->refreshTokenWithAssertion($cred);
-		}
-
-		$_SESSION['service_token'] = $client->getAccessToken();
-		$this->service = new Google_Service_Analytics($client);
+	public function fail()
+	{
+		return $this->abort;
 	}
 
 	public function set_date_range($start, $end)
@@ -98,7 +111,14 @@ class Analytics {
 
 	public function get_data($metrics, $params)
 	{
-		$results    = $this->service->data_ga->get('ga:'.$this->profile_id, $this->start_date, $this->end_date, $metrics, $params);
+		try {
+			$results = $this->service->data_ga->get('ga:'.$this->profile_id, $this->start_date, $this->end_date, $metrics, $params);
+		} catch (Google_Service_Exception $e) {
+			show_error("Error code: " . $e->getCode() . "<br>" . "Error message: " . $e->getMessage(), 500, 'Google Analytics');
+		} catch (Google_Exception $e) {
+			show_error("An error occurred: (" . $e->getCode() . ") " . $e->getMessage(), 500, 'Google Exception');
+		}
+
 		return $results->rows;
 	}
 
