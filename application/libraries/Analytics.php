@@ -13,9 +13,7 @@
  * @version 	0.1.2
  */
 
-set_include_path(get_include_path() . PATH_SEPARATOR . APPPATH . 'third_party');
-require_once(APPPATH . 'third_party/Google/Client.php');
-require_once(APPPATH . 'third_party/Google/Service/Analytics.php');
+require_once(APPPATH . 'third_party/Google/autoload.php');
 
 class Analytics {
 
@@ -26,6 +24,8 @@ class Analytics {
 	private $start_date;
 	private $end_date;
 	private $ci;
+	private $error;
+	private $fail;
 
 	public function __construct($params = array())
 	{
@@ -66,11 +66,19 @@ class Analytics {
 		}
 
 		$key = file_get_contents($this->key_location);
-		$cred = new Google_Auth_AssertionCredentials(
-		    $this->account_mail,
-		    array(Google_Service_Analytics::ANALYTICS_READONLY),
-		    $key
-		);
+
+		try {
+			$cred = new Google_Auth_AssertionCredentials(
+			    $this->account_mail,
+			    array(Google_Service_Analytics::ANALYTICS_READONLY),
+			    $key
+			);
+		} catch (Google_Service_Exception $e) {
+			print "Error code :" . $e->getCode() . "\n";
+			print "Error message: " . $e->getMessage() . "\n";
+		} catch (Google_Exception $e) {
+			print "An error occurred: (" . $e->getCode() . ") " . $e->getMessage() . "\n";
+		}
 
 		$client->setAssertionCredentials($cred);
 
