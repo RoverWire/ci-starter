@@ -1,0 +1,8 @@
+{
+	"require": {
+		"php": ">=5.2.4"
+	},
+	"require-dev": {
+		"kenjis/ci-phpunit-test": ">=0.6.2"
+	}
+}
