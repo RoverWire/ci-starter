@@ -64,11 +64,9 @@ class Admin extends Admin_Controller {
 		$this->form_validation->set_rules('repeat', 'repetir', 'required|trim');
 
 		if ($this->form_validation->run()) {
-			$data = $this->input->post('data', TRUE);
-			if ($this->administrator->insert($data)) {
-				$this->session->set_flashdata('msg_success', 'El usuario administrador ha sido agregado.');
-				redirect('admin/access');
-			}
+			$this->administrator->insert($this->input->post('data', TRUE));
+			$this->session->set_flashdata('msg_success', 'El usuario administrador ha sido agregado.');
+			redirect('admin/access');
 		}
 
 		$data = $this->administrator->prepare_data($this->input->post('data'));
@@ -105,11 +103,14 @@ class Admin extends Admin_Controller {
 		}
 
 		if ($this->form_validation->run()) {
-			$data = $this->input->post('data', TRUE);
-			if ($this->administrator->update($data, $id) !== FALSE) {
-				$this->session->set_flashdata('msg_success', 'Los datos del usuario han sido actualizados.');
-				redirect('admin/access');
+			$this->administrator->update($this->input->post('data', TRUE), $id);
+			$this->session->set_flashdata('msg_success', 'Los datos del usuario han sido actualizados.');
+
+			if ($id == $_SESSION['session_id']) {
+				$this->administrator->build_session('id', $id);
 			}
+
+			redirect('admin/access');
 		}
 
 		$data = $this->administrator->prepare_data($this->input->post('data'), $stored);
@@ -130,6 +131,11 @@ class Admin extends Admin_Controller {
 		}
 
 		redirect('admin/access');
+	}
+
+	public function change_password()
+	{
+		$this->template->render();
 	}
 
 }

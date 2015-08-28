@@ -63,16 +63,22 @@ class Administrator extends MY_Model {
 	public function login($user, $pass)
 	{
 		if ($this->admin_auth->login($user, $pass)) {
-			$data = $this->db->where('user', $user)->get($this->_table, 1)->row();
-			$this->load->helper('gravatar');
-			$this->session->set_userdata('session_gravatar', get_gravatar($data->mail, 128));
-			$this->session->set_userdata('session_username', $data->user);
-			$this->session->set_userdata('session_mail', $data->mail);
-			$this->session->set_userdata('session_name', $data->name);
+			$this->build_session('user', $user);
 			return TRUE;
 		} else {
 			return FALSE;
 		}
+	}
+
+	public function build_session($field, $key)
+	{
+		$data = $this->db->where($field, $key)->get($this->_table, 1)->row();
+		$this->load->helper('gravatar');
+		$this->session->set_userdata('session_gravatar', get_gravatar($data->mail, 128));
+		$this->session->set_userdata('session_username', $data->user);
+		$this->session->set_userdata('session_mail', $data->mail);
+		$this->session->set_userdata('session_name', $data->name);
+		$this->session->set_userdata('session_id', $data->id);
 	}
 
 	public function send_password($mail)

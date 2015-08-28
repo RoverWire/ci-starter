@@ -49,14 +49,11 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-right mg-r-xs">
             <li>
-              <a href="#">Perfil</a>
-            </li>
-            <li>
-              <a href="#">Cambiar Contraseña</a>
+              <a href="/admin/access/edit/<?php echo $_SESSION['session_id'] ?>">Cambiar Contraseña</a>
             </li>
             <li class="divider"></li>
             <li>
-              <a href="/admin/logout">Cerrar Sesión</a>
+              <a href="/access/logout">Cerrar Sesión</a>
             </li>
           </ul>
         </li>
