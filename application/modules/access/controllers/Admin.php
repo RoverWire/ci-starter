@@ -18,7 +18,7 @@ class Admin extends Admin_Controller {
 
 		$this->load->library('pagination');
 		$default     = array('search', 'offset');
-		$param       = $this->uri->uri_to_assoc(4, $default);
+		$param       = $this->uri->uri_to_assoc(3, $default);
 		$num_results = 15;
 
 		$param['search']     = ($this->input->post('search') != '') ? $this->input->post('search', TRUE):$param['search'];
@@ -30,14 +30,14 @@ class Admin extends Admin_Controller {
 
 		if (empty($param['search'])) {
 			unset($param['search']);
-			$config['uri_segment'] = 5;
+			$config['uri_segment'] = 4;
 		} else {
-			$config['uri_segment'] = 7;
+			$config['uri_segment'] = 6;
 		}
 
 		$param['offset']      = '';
 		$config['total_rows'] = $this->administrator->found_rows();
-		$config['base_url']   = '/admin/access/index/'.$this->uri->assoc_to_uri($param);
+		$config['base_url']   = '/admin/access/'.$this->uri->assoc_to_uri($param);
 		$config['per_page']   = $num_results;
 
 		$this->pagination->initialize($config);
