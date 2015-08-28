@@ -14,7 +14,7 @@ class Setup extends CI_Controller {
 		if (! $this->migration->current()) {
 			show_error($this->migration->error_string());
 		} else {
-			echo "Migración realizada.";
+			echo "Done.";
 		}
 	}
 
