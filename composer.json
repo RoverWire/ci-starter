@@ -1,8 +1,8 @@
 {
 	"require": {
-		"php": ">=5.2.4"
+		"php": ">=5.4.0"
 	},
 	"require-dev": {
-		"kenjis/ci-phpunit-test": ">=0.6.2"
+		"filp/whoops": "^1.1"
 	}
 }
