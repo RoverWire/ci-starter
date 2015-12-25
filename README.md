@@ -7,7 +7,7 @@ Starter setup for codeigniter projects that includes:
 - Admin panel
 - Simple user management for admin access
 - Block access after failed attempts (default 15 minutes after 3 attempts)
-- Reset access by mail when user forgor password
+- Reset access by mail when user forgot password
 - HMVC integration
 - Access library can be used with other module
 - Google analytics integration to show visits graph
