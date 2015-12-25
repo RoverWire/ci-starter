@@ -1,6 +1,7 @@
 # Codeigniter Boilerplate
 
 [![Codeigniter](https://img.shields.io/badge/Codeigniter-v3.0.3-orange.svg)](http://codeigniter.com/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-v3.3.6-6f5499.svg)](http://getbootstrap.com/)
 
 Starter setup for codeigniter projects that includes:
 
