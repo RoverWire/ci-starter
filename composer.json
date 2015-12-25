@@ -1,7 +1,8 @@
 {
 	"require": {
 		"php": ">=5.4.0",
-		"codeigniter/framework": "^3.0"
+		"codeigniter/framework": "^3.0",
+		"google/apiclient": "^1.1"
 	},
 	"require-dev": {
 		"filp/whoops": "^1.1"

@@ -13,8 +13,6 @@
  * @version 	0.2.1
  */
 
-require_once(APPPATH . 'third_party/Google/autoload.php');
-
 class Analytics {
 
 	private $account_mail;
