@@ -1,9 +1,19 @@
 {
 	"require": {
-		"php": ">=5.4.0"
+		"php": ">=5.4.0",
+		"codeigniter/framework": "^3.0"
 	},
 	"require-dev": {
-		"filp/whoops": "^1.1",
-		"codeigniter/framework": "^3.0"
-	}
+		"filp/whoops": "^1.1"
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"CiStarter\\Package::postInstall"
+		]
+	},
+	"autoload": {
+        "psr-4": {
+            "CiStarter\\": "application/third_party/Composer/"
+        }
+    }
 }
