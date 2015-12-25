@@ -11,8 +11,8 @@
 </div>
 
 <?php if (!empty($msg_success)): ?>
-  <div class="alert alert-success">
-    <button type="button" class="close" data-dismiss="alert">x</button>
+  <div class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
     <?php echo $msg_success; ?>
   </div>
 <?php endif ?>

@@ -12,8 +12,8 @@
     </div>
 
     <?php if (validation_errors() != ''): ?>
-      <div class="alert alert-danger">
-        <button type="button" class="close" data-dismiss="alert">x</button>
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
         <h4>Error</h4>
         La información está incompleta o errónea.
       </div>
