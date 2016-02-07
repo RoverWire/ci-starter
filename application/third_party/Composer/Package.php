@@ -15,7 +15,6 @@ class Package {
 		$vendor_dir = $event->getComposer()->getConfig()->get('vendor-dir');
 
 		$package->removeFolder($vendor_dir . '/codeigniter/framework/application');
-		/*
 		$package->removeFolder($vendor_dir . '/codeigniter/framework/user_guide');
 		$package->removeFolder($vendor_dir . '/codeigniter/framework/.git');
 		$package->deleteFiles($vendor_dir . '/codeigniter/framework');
@@ -27,7 +26,6 @@ class Package {
 		$package->removeFolder($vendor_dir . '/google/apiclient/.git');
 		$package->deleteFiles($vendor_dir . '/google/apiclient');
 		$event->getIO()->write('apiclient package cleaned');
-		*/
 	}
 
 	public function removeFolder($element)
@@ -56,8 +54,9 @@ class Package {
 		if (is_dir($element)) {
 			$objects = scandir($element);
 			foreach ($objects as $file) {
-				if ($file != '.' && $file != '..' && !is_dir($file)) {
-					@unlink($file);
+				$item = $element.'/'.$file;
+				if ($item != '.' && $item != '..' && !is_dir($item)) {
+					@unlink($item);
 				}
 			}
 
