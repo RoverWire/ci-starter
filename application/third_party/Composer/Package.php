@@ -9,19 +9,65 @@ use Composer\Installer\PackageEvent;
 
 class Package {
 
-	public static function postInstall(Event $event)
+	public static function clean(Event $event)
 	{
+		$package = new static();
 		$vendor_dir = $event->getComposer()->getConfig()->get('vendor-dir');
 
-		if (is_dir($vendor_dir . '/codeigniter/framework/application')) {
-			exec("rm -R $vendor_dir/codeigniter/framework/application $vendor_dir/codeigniter/framework/user_guide && rm $vendor_dir/codeigniter/framework/*.*");
-			$event->getIO()->write("Codeigniter installation cleaned");
+		$package->removeFolder($vendor_dir . '/codeigniter/framework/application');
+		/*
+		$package->removeFolder($vendor_dir . '/codeigniter/framework/user_guide');
+		$package->removeFolder($vendor_dir . '/codeigniter/framework/.git');
+		$package->deleteFiles($vendor_dir . '/codeigniter/framework');
+		$event->getIO()->write('codeigniter package cleaned');
+
+		$package->removeFolder($vendor_dir . '/google/apiclient/examples');
+		$package->removeFolder($vendor_dir . '/google/apiclient/style');
+		$package->removeFolder($vendor_dir . '/google/apiclient/tests');
+		$package->removeFolder($vendor_dir . '/google/apiclient/.git');
+		$package->deleteFiles($vendor_dir . '/google/apiclient');
+		$event->getIO()->write('apiclient package cleaned');
+		*/
+	}
+
+	public function removeFolder($element)
+	{
+		if (is_dir($element)) {
+			$objects = scandir($element);
+			foreach ($objects as $object) {
+				if ($object != "." && $object != "..") {
+					if (is_dir($element."/".$object)) {
+						$this->removeFolder($element."/".$object);
+					} else {
+						@unlink($element."/".$object);
+					}
+				}
+			}
+
+			@rmdir($element);
+			return TRUE;
 		}
 
-		if (is_dir($vendor_dir . '/google/apiclient/examples')) {
-			exec("rm -R $vendor_dir/google/apiclient/examples $vendor_dir/google/apiclient/style $vendor_dir/google/apiclient/tests && rm $vendor_dir/google/apiclient/*.*");
-			$event->getIO()->write("Google Api Client cleaned");
+		return FALSE;
+	}
+
+	public function deleteFiles($element)
+	{
+		if (is_dir($element)) {
+			$objects = scandir($element);
+			foreach ($objects as $file) {
+				if ($file != '.' && $file != '..' && !is_dir($file)) {
+					@unlink($file);
+				}
+			}
+
+			return TRUE;
+		} else if (is_file($element)) {
+			@unlink($element);
+			return TRUE;
 		}
+
+		return FALSE;
 	}
 
 }
