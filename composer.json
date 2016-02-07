@@ -5,7 +5,8 @@
 		"google/apiclient": "^1.1"
 	},
 	"require-dev": {
-		"filp/whoops": "^1.1"
+		"filp/whoops": "^1.1",
+		"roave/security-advisories": "dev-master"
 	},
 	"scripts": {
 		"post-install-cmd": [
