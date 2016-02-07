@@ -1,6 +1,6 @@
 # Codeigniter Boilerplate
 
-[![Codeigniter](https://img.shields.io/badge/Codeigniter-v3.0.3-orange.svg)](http://codeigniter.com/)
+[![Codeigniter](https://img.shields.io/badge/Codeigniter-v3.0.4-orange.svg)](http://codeigniter.com/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-v3.3.6-6f5499.svg)](http://getbootstrap.com/)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/91def6b56ce945e2a1a52c99a804cb10)](https://www.codacy.com/app/roverwire/ci-starter)
 
@@ -21,5 +21,6 @@ Starter setup for codeigniter projects that includes:
 - Create database for the project and set access on application/config/database.php
 - Install composer dependencies
 - Access to http://yoursite.com/setup
+- Optional: Enable hooks to use whoops on development.
 
 And that's it! Now you can access to /admin area with admin / 123456 credentials.
