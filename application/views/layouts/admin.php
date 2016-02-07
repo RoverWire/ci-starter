@@ -5,10 +5,10 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
   <title>Admin | <?php echo $title ?></title>
-  <link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.css">
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/assets/css/admin.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/assets/vendor/offline/theme.css">
+  <link rel="stylesheet" href="/assets/vendor/offline/themes/offline-language-spanish.css">
 
   <?php echo $_styles ?>
 
@@ -108,7 +108,7 @@
   </div>
 
   <script src="/assets/vendor/jquery.js"></script>
-  <script src="/assets/vendor/bootstrap/bootstrap.js"></script>
+  <script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
   <script src="/assets/vendor/off-canvas.js"></script>
   <script src="/assets/vendor/jquery.placeholder.js"></script>
   <script src="/assets/vendor/offline/offline.min.js"></script>
