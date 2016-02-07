@@ -1,21 +1,21 @@
 {
-	"require": {
-		"php": ">=5.4.0",
-		"codeigniter/framework": "^3.0",
-		"google/apiclient": "^1.1"
-	},
-	"require-dev": {
-		"filp/whoops": "^2.0",
-		"roave/security-advisories": "dev-master"
-	},
-	"scripts": {
-		"post-autoload-dump": [
-			"CiStarter\\Package::clean"
-		]
-	},
-	"autoload": {
-        "psr-4": {
-            "CiStarter\\": "application/third_party/Composer/"
-        }
+  "require": {
+    "php": ">=5.4.0",
+    "codeigniter/framework": "^3.0",
+    "google/apiclient": "^1.1"
+  },
+  "require-dev": {
+    "filp/whoops": "^2.0",
+    "roave/security-advisories": "dev-master"
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "CiStarter\\Package::clean"
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "CiStarter\\": "application/third_party/Composer/"
     }
+  }
 }

@@ -7,6 +7,6 @@
 
 **/.DS_Store
 **/*.p12
-./vendor
+/vendor
 composer.lock
 system
