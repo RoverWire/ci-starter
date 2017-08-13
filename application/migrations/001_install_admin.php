@@ -34,7 +34,7 @@ class Migration_Install_Admin extends CI_Migration {
 		$this->dbforge->create_table('auth_attempts', TRUE, $attributes);
 
 		$fields = array(
-				"`id` varchar(40) NOT NULL",
+				"`id` varchar(128) NOT NULL",
 				"`ip_address` varchar(45) NOT NULL",
 				"`timestamp` int(10) unsigned DEFAULT 0 NOT NULL",
 				"`data` blob NOT NULL",
