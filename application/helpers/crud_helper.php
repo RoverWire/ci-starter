@@ -18,7 +18,7 @@ if (! function_exists('validate_select')) {
 }
 
 /**
- * Function Name
+ * Validate Checkbox
  *
  * An alternative to validate if a checkbox is checked or not
  *
