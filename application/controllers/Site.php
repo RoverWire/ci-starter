@@ -12,6 +12,11 @@ class Site extends CI_Controller {
 		$this->template->render();
 	}
 
+	public function info()
+	{
+		phpinfo();
+	}
+
 }
 
 /* End of file Site.php */

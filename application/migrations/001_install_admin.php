@@ -22,7 +22,7 @@ class Migration_Install_Admin extends CI_Migration {
 
 		$this->dbforge->add_field($fields);
 		$this->dbforge->create_table('administrators', TRUE, $attributes);
-		$this->db->simple_query("INSERT INTO `administrators` (`name`, `user`, `pass`, `mail`, `active`, `created`) VALUES ('Administrador', 'admin', '09ae22c2c195d71cca64d461a1603332efb073d9', 'admin@localhost.com', 1, CURRENT_TIMESTAMP)");
+		$this->db->simple_query("INSERT INTO `administrators` (`name`, `user`, `pass`, `mail`, `active`, `created`) VALUES ('Administrator', 'admin', '09ae22c2c195d71cca64d461a1603332efb073d9', 'admin@localhost.com', 1, CURRENT_TIMESTAMP)");
 
 		$fields = array(
 				"`ip` varchar(20) NOT NULL PRIMARY KEY",

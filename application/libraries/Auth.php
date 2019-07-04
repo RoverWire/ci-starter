@@ -86,7 +86,7 @@ class Auth	{
 		if(!empty($password) AND !empty($stored)){
 			$salt = substr($stored, 0, $this->salt_length);
 			return $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
-		}else{
+		} else {
 			return FALSE;
 		}
 	}
