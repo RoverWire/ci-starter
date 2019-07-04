@@ -8,5 +8,7 @@
 **/.DS_Store
 **/*.p12
 /vendor
-composer.lock
 system
+
+docker-compose.yml
+phpdocker
