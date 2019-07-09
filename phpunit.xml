@@ -3,7 +3,7 @@
   <testsuites>
     <testsuite name="CI-Starter-Tests">
       <directory suffix="test.php">./tests</directory>
-	    <exclude>./tests/setup</exclude>
+	    <exclude>./tests/core</exclude>
     </testsuite>
   </testsuites>
 </phpunit>
