@@ -11,6 +11,7 @@
 **/*.p12
 /vendor
 system
+build
 .phpunit.result.cache
 
 docker-compose.yml
