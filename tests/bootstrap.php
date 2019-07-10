@@ -290,4 +290,5 @@ switch (ENVIRONMENT)
  * And away we go...
  */
 
-require_once __DIR__.'/core/CodeIgniter.php';
+require __DIR__ . '/ciphpunit/overwrites/core/CodeIgniter.php';
+require_once __DIR__.'/ciphpunit/CIPHPUnitTest.php';

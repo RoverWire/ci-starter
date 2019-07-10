@@ -1,13 +1,7 @@
 <?php
-use PHPUnit\Framework\TestCase;
-final class CodeigniterTest extends TestCase
+
+final class ExampleTest extends CIPHPUnitTest
 {
-    function __construct() 
-    {
-        parent::__construct();
-        $this->CI = & get_instance();
-    }
-    
     public function testConfigItem()
     {
         $indexPage = $this->CI->config->item('index_page');
