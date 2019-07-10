@@ -13,7 +13,6 @@
       <directory suffix=".php">../application/views</directory>
       <directory suffix=".php">../application/libraries</directory>
       <directory suffix=".php">../application/helpers</directory>
-      <directory suffix=".php">../application/hooks</directory>
     </whitelist>
   </filter>
   <logging>
